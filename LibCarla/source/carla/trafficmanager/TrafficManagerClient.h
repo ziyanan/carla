@@ -6,14 +6,18 @@
 
 #pragma once
 
-#include "carla/client/Actor.h"
 #include <rpc/client.h>
+
+#include "carla/client/Actor.h"
+#include "carla/geom/Transform.h"
 
 #define TM_TIMEOUT        2000 // In ms
 #define TM_DEFAULT_PORT   8000 // TM_SERVER_PORT
 
 namespace carla {
 namespace traffic_manager {
+
+namespace cg = carla::geom;
 
 /// Provides communication with the rpc of TrafficManagerServer.
 class TrafficManagerClient {
@@ -189,6 +193,13 @@ public:
   void SetHybridPhysicsRadius(const float radius) {
     DEBUG_ASSERT(_client != nullptr);
     _client->call("set_hybrid_physics_radius", radius);
+  }
+
+  /// Method to retrieve vehicle's path
+  using PathBuffer = std::vector<cg::Transform>;
+  PathBuffer GetPathBuffer(const ActorId actor_id) const {
+    DEBUG_ASSERT(_client != nullptr);
+    return _client->call("get_path_buffer", actor_id).as<PathBuffer>();
   }
 
 private:

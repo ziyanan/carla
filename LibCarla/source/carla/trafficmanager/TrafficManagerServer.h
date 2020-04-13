@@ -8,16 +8,20 @@
 
 #include <vector>
 
-#include "carla/Exception.h"
 #include "carla/client/Actor.h"
 #include "carla/client/detail/ActorVariant.h"
+#include "carla/Exception.h"
+#include "carla/geom/Transform.h"
 #include "carla/rpc/Server.h"
 #include "carla/trafficmanager/TrafficManagerBase.h"
 
 namespace carla {
 namespace traffic_manager {
 
-using ActorPtr = carla::SharedPtr<carla::client::Actor>;
+namespace cc = carla::client;
+namespace cg = carla::geom;
+
+using ActorPtr = carla::SharedPtr<cc::Actor>;
 
 class TrafficManagerServer {
 public:
@@ -182,6 +186,11 @@ public:
 
       /// Method to check server is alive or not.
       server->bind("health_check_remote_TM", [=](){});
+
+      /// Method to retrieve vehicle's path buffer.
+      server->bind("get_path_buffer", [=](const ActorId actor_id) -> std::vector<cg::Transform> {
+        return tm->GetPathBuffer(actor_id);
+      });
 
       /// Run traffic manager server to respond of any
       /// user client in asynchronous mode.

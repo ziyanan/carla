@@ -175,6 +175,7 @@ namespace traffic_manager {
     /// Method to set hybrid physics radius.
     void SetHybridPhysicsRadius(const float radius);
 
+    std::vector<cg::Transform> GetPathBuffer(const ActorId actor_id) const;
   };
 
 } // namespace traffic_manager

@@ -287,5 +287,9 @@ std::vector<ActorId> TrafficManagerLocal::GetRegisteredVehiclesIDs() {
   return registered_actors.GetIDList();
 }
 
+std::vector<cg::Transform> TrafficManagerLocal::GetPathBuffer(const ActorId actor_id) const {
+  return localization_stage->GetPathBuffer(actor_id);
+}
+
 } // namespace traffic_manager
 } // namespace carla

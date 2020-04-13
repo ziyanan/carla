@@ -14,15 +14,19 @@
 #include "carla/client/Actor.h"
 #include "carla/client/detail/Simulator.h"
 #include "carla/client/detail/EpisodeProxy.h"
+#include "carla/geom/Transform.h"
 #include "carla/trafficmanager/TrafficManagerBase.h"
 #include "carla/trafficmanager/TrafficManagerClient.h"
 
 namespace carla {
 namespace traffic_manager {
 
-using ActorPtr = carla::SharedPtr<carla::client::Actor>;
+namespace cc = carla::client;
+namespace cg = carla::geom;
+
+using ActorPtr = carla::SharedPtr<cc::Actor>;
 using TLS = carla::rpc::TrafficLightState;
-using TLGroup = std::vector<carla::SharedPtr<carla::client::TrafficLight>>;
+using TLGroup = std::vector<carla::SharedPtr<cc::TrafficLight>>;
 
 /// The function of this class is to integrate all the various stages of
 /// the traffic manager appropriately using messengers.
@@ -117,6 +121,9 @@ public:
 
   /// Method to check server is alive or not.
   void HealthCheckRemoteTM();
+
+  /// Method to retrieve vehicle's path buffer.
+  std::vector<cg::Transform> GetPathBuffer(const ActorId actor_id) const;
 
 private:
 

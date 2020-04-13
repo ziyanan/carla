@@ -93,6 +93,8 @@ namespace LocalizationConstants {
     // Looping over registered actors.
     for (uint64_t i = 0u; i < actor_list.size(); ++i) {
 
+      std::unique_lock<std::mutex> lock(path_buffer_mutex);
+
       const Actor vehicle = actor_list.at(i);
       const ActorId actor_id = vehicle->GetId();
       const cg::Location vehicle_location = vehicle->GetLocation();
@@ -210,6 +212,9 @@ namespace LocalizationConstants {
         }
         PushWaypoint(waypoint_buffer, actor_id, next_wp);
       }
+
+      // Release lock on buffer modification after done editing buffer.
+      lock.unlock();
 
       // Begining point of the waypoint buffer;
       const SimpleWaypointPtr& updated_front_waypoint = waypoint_buffer.front();
@@ -1018,6 +1023,22 @@ namespace LocalizationConstants {
       enabled = kinematic_state_map.at(actor_id).physics_enabled;
     }
     return enabled;
+  }
+
+  std::vector<cg::Transform> LocalizationStage::GetPathBuffer(const ActorId actor_id) const {
+    std::lock_guard<std::mutex> lock(path_buffer_mutex);
+
+    std::vector<cg::Transform> return_list;
+    if (buffer_list->find(actor_id) != buffer_list->end()) {
+      const Buffer &buffer = buffer_list->at(actor_id);
+      const unsigned long buffer_size = buffer.size();
+      return_list.reserve(buffer_size);
+      for (unsigned int i = 0u; i < buffer_size; ++i) {
+        return_list.at(i) = buffer.at(i)->GetTransform();
+      }
+    }
+
+    return return_list;
   }
 
 } // namespace traffic_manager

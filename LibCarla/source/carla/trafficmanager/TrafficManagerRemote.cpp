@@ -4,15 +4,18 @@
 // This work is licensed under the terms of the MIT license.
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
-#include <carla/client/Client.h>
+#include "carla/client/Client.h"
 #include "carla/client/TrafficLight.h"
 #include "carla/client/ActorList.h"
 #include "carla/client/DebugHelper.h"
+#include "carla/geom/Transform.h"
 
 #include "carla/trafficmanager/TrafficManagerRemote.h"
 
 namespace carla {
 namespace traffic_manager {
+
+namespace cg = carla::geom;
 
 TrafficManagerRemote::TrafficManagerRemote(
     const std::pair<std::string, uint16_t> &_serverTM,
@@ -206,6 +209,10 @@ void TrafficManagerRemote::HealthCheckRemoteTM() {
 
 carla::client::detail::EpisodeProxy& TrafficManagerRemote::GetEpisodeProxy() {
   return episodeProxyTM;
+}
+
+std::vector<cg::Transform> TrafficManagerRemote::GetPathBuffer(const ActorId actor_id) const {
+  return client.GetPathBuffer(actor_id);
 }
 
 } // namespace traffic_manager

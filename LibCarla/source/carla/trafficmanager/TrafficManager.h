@@ -11,10 +11,13 @@
 #include <vector>
 
 #include "carla/client/Actor.h"
+#include "carla/geom/Transform.h"
 #include "carla/trafficmanager/TrafficManagerBase.h"
 
 namespace carla {
 namespace traffic_manager {
+
+namespace cg = carla::geom;
 
 using ActorPtr = carla::SharedPtr<carla::client::Actor>;
 
@@ -217,6 +220,16 @@ public:
     if(tm_ptr != nullptr){
       tm_ptr->SetKeepRightPercentage(actor, percentage);
     }
+  }
+
+  /// Method to retrieve vehicle's path buffer.
+  std::vector<cg::Transform> GetPathBuffer(const ActorId actor_id) const {
+    TrafficManagerBase* tm_ptr = GetTM(_port);
+    std::vector<cg::Transform> path_buffer;
+    if(tm_ptr != nullptr) {
+      path_buffer = tm_ptr->GetPathBuffer(actor_id);
+    }
+    return path_buffer;
   }
 
 private:

@@ -8,6 +8,7 @@
 
 #include <memory>
 #include "carla/client/Actor.h"
+#include "carla/geom/Transform.h"
 
 #define MIN_TRY_COUNT       20
 #define TM_DEFAULT_PORT     8000
@@ -15,7 +16,10 @@
 namespace carla {
 namespace traffic_manager {
 
-using ActorPtr = carla::SharedPtr<carla::client::Actor>;
+namespace cc = carla::client;
+namespace cg = carla::geom;
+
+using ActorPtr = carla::SharedPtr<cc::Actor>;
 
 /// The function of this class is to integrate all the various stages of
 /// the traffic manager appropriately using messengers.
@@ -106,6 +110,9 @@ public:
 
   /// Method to set hybrid physics radius.
   virtual void SetHybridPhysicsRadius(const float radius) = 0;
+
+  /// Method to retrieve vehicle's path buffer.
+  virtual std::vector<cg::Transform> GetPathBuffer(const ActorId actor_id) const = 0;
 
 protected:
 

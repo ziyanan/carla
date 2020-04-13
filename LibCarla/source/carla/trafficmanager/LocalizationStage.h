@@ -148,6 +148,8 @@ namespace traffic_manager {
     std::mutex step_execution_mutex;
     /// Condition variables for progressing synchronous execution.
     std::condition_variable step_execution_trigger;
+    /// Mutex for concurrent access to waypoint buffers from user thread.
+    mutable std::mutex path_buffer_mutex;
 
     /// A simple method used to draw waypoint buffer ahead of a vehicle.
     void DrawBuffer(Buffer &buffer);
@@ -200,6 +202,9 @@ namespace traffic_manager {
 
     /// Method to trigger initiation of pipeline in synchronous mode.
     bool RunStep();
+
+    /// Method to retrieve vehicle's path buffer.
+    std::vector<cg::Transform> GetPathBuffer(const ActorId actor_id) const;
   };
 
 } // namespace traffic_manager
