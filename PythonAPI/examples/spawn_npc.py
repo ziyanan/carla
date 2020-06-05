@@ -244,7 +244,10 @@ def main():
 
         while True:
             if args.sync and synchronous_master:
-                world.tick()
+                print('---------------- Frame Begin -----------------')
+                frame_id = world.tick()
+                print('Carla frame ID: ' + str(frame_id))
+                print('----------------  Frame End  -----------------')
             else:
                 world.wait_for_tick()
 

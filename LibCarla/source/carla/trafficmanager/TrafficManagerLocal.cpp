@@ -116,6 +116,8 @@ void TrafficManagerLocal::Run() {
   current_reserved_capacity = INITIAL_SIZE;
 
   while (run_traffic_manger.load()) {
+    std::cout << "TM Frame ID: " << world.GetSnapshot().GetFrame() << std::endl;;
+
     bool synchronous_mode = parameters.GetSynchronousMode();
     bool hybrid_physics_mode = parameters.GetHybridPhysicsMode();
 
