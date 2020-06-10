@@ -384,7 +384,7 @@ class KeyboardControl(object):
                         world.player.set_autopilot(self._autopilot_enabled)
                         # Reset vehicle controls if autopilot disabled.
                         if not self._autopilot_enabled:
-                            self._control = carla.VehicleControl(0, 0, 0)
+                            self._control = carla.VehicleControl()
                             world.player.apply_control(self._control)
                         world.hud.notification(
                             'Autopilot %s' % ('On' if self._autopilot_enabled else 'Off'))
