@@ -382,6 +382,10 @@ class KeyboardControl(object):
                     elif event.key == K_p and not pygame.key.get_mods() & KMOD_CTRL:
                         self._autopilot_enabled = not self._autopilot_enabled
                         world.player.set_autopilot(self._autopilot_enabled)
+                        # Reset vehicle controls if autopilot disabled.
+                        if not self._autopilot_enabled:
+                            self._control = carla.VehicleControl(0, 0, 0)
+                            world.player.apply_control(self._control)
                         world.hud.notification(
                             'Autopilot %s' % ('On' if self._autopilot_enabled else 'Off'))
                     elif event.key == K_l and pygame.key.get_mods() & KMOD_CTRL:
